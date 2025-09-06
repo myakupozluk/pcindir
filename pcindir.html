@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RAM İndir - Resmi Dağıtım</title>
+  <meta name="description" content="PC İndir resmi sitesi. 1024 TB RAM'den Radeon RX 9060 XT'ye kadar herşeyi buradan edinebilirsiniz." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { color-scheme: dark light; }
+    html { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    video { width: 100%; height: 100%; object-fit: contain; background: black; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-50 via-slate-100 to-slate-50 text-slate-900">
+  <header class="border-b border-slate-300 bg-white/70 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">PC İndir</h1>
+      <nav class="space-x-6 text-sm font-semibold text-slate-700">
+        <a href="#" class="hover:underline">Ana Sayfa</a>
+        <a href="#" class="hover:underline">Destek</a>
+        <a href="#" class="hover:underline">Belgeler</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold">PC Paketleri</h2>
+      <p class="mt-3 text-slate-600">1024 TB RAM'den Radeon RX 9060 XT'ye kadar herşeyi buradan indirin.</p>
+    </div>
+
+    <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4"></div>
+  </main>
+
+  <div id="fullscreenPlayer" class="fixed inset-0 hidden bg-black z-50">
+    <video id="player" controls autoplay playsinline class="w-full h-full"></video>
+    <button id="closeBtn" class="absolute top-4 right-4 bg-white text-black rounded-full w-10 h-10 font-bold">×</button>
+  </div>
+
+  <footer class="border-t border-slate-300 bg-white/70 backdrop-blur mt-16">
+    <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-500">
+      <p>© 2025 PC İndir Resmi Dağıtım Merkezi</p>
+    </div>
+  </footer>
+
+  <script>
+    const ramSizes = [4, 8, 16, 32, 64, 128, 256, 512, 1024];
+    const gpus = [
+      "RTX 4090", "RTX 4080", "RTX 4070 Ti", "RTX 4070", "RTX 4060 Ti", "RTX 4060",
+      "RX 7900 XTX", "RX 7900 XT", "RX 7800 XT", "RX 7700 XT", "RX 7600 XT", "RX 7600",
+      "RTX 3090 Ti", "RTX 3080 Ti", "RTX 3070 Ti", "RTX 3060 Ti", "RTX 3050", "RTX 2080 Ti",
+      "Titan RTX", "Radeon VII"
+    ];
+    const cpus = [
+      "Ryzen 9 7950X", "Ryzen 9 7900X", "Ryzen 7 7800X3D", "Ryzen 7 7700X", "Ryzen 5 7600X",
+      "Core i9-14900K", "Core i7-14700K", "Core i5-14600K", "Core i9-13900KS", "Core i7-13700K",
+      "Core i5-13600K", "Core i9-12900KS", "Core i7-12700K", "Core i5-12600K", "Core i9-11900K",
+      "Core i7-11700K", "Core i5-11600K", "Ryzen Threadripper 3990X", "Ryzen Threadripper 3970X", "Xeon W-3175X"
+    ];
+
+    const grid = document.getElementById('grid');
+    const fullscreenPlayer = document.getElementById('fullscreenPlayer');
+    const player = document.getElementById('player');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function createBtn(label, videoFile) {
+      const btn = document.createElement('button');
+      btn.className = "group relative overflow-hidden rounded-2xl border border-slate-300 bg-white px-4 py-6 text-center font-extrabold text-lg shadow hover:scale-[1.02] active:scale-[0.98] transition";
+      btn.innerHTML = label;
+      btn.addEventListener('click', () => openFullscreen(videoFile));
+      grid.appendChild(btn);
+    }
+
+    ramSizes.forEach(v => {
+      createBtn(`${v}${v >= 1024 ? 'TB RAM' : 'GB RAM'}`, "videos/ram.mp4");
+    });
+
+    gpus.forEach(gpu => {
+      createBtn(gpu, "videos/gpu.mp4");
+    });
+
+    cpus.forEach(cpu => {
+      createBtn(cpu, "videos/cpu.mp4");
+    });
+
+    function openFullscreen(src) {
+      player.pause();
+      player.innerHTML = '';
+      const source = document.createElement('source');
+      source.src = src;
+      source.type = src.endsWith('.m3u8') ? 'application/x-mpegURL' : 'video/mp4';
+      player.appendChild(source);
+      fullscreenPlayer.classList.remove('hidden');
+      player.load();
+      player.play().catch(() => {});
+    }
+
+    closeBtn.addEventListener('click', () => {
+      player.pause();
+      fullscreenPlayer.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        player.pause();
+        fullscreenPlayer.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
